@@ -350,7 +350,6 @@ header .head-side {
 
 .user-photo-item {
     margin-right:10px;
-    max-width: 25%;
 }
 .user-photo-item:last-child {
     margin-right:0;
@@ -390,23 +389,6 @@ header .head-side {
 }
 .full-user-photos .user-photo-item {
     margin:0;
-}
-
-.feed-pagination a {
-    display: inline-block;
-    padding: 7px 10px;
-    border: 1px solid #ccc;
-    margin: 5px;
-    text-decoration: none;
-    color: #000;
-}
-
-.feed-pagination a:hover {
-    background-color: #ddd;
-}
-
-.feed-pagination a.active {
-    background-color: rgb(185, 208, 250);
 }
 
 @media (max-width: 992px) {

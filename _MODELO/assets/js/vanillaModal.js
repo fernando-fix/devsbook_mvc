@@ -419,3 +419,5 @@ var VanillaModal = (function () {
     window.VanillaModal = VanillaModal;
   }
 })();
+
+var modal = new VanillaModal();
