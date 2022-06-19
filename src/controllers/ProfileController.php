@@ -35,7 +35,11 @@ class ProfileController extends Controller {
         $dateTo = new \DateTime('today');
         $user->ageYears = $dateFrom->diff($dateTo)->y;
 
-        $feed = PostHandler::getUserFeed($id);
+        $feed = PostHandler::getUserFeed(
+            $id,
+            $page,
+            $this->loggedUser->id
+        );
 
         $this->render('profile', [
             'loggedUser' => $this->loggedUser,

@@ -71,8 +71,8 @@ class UserHandler {
                 $user->following = [];
                 $user->photos = [];
 
-                //followers
-                $followers = UserRelation::select()->where('user_to', $id)->get(); //que sou eu que estou sendo seguindo
+                //followers - pessoas que me seguem
+                $followers = UserRelation::select()->where('user_to', $id)->get();
 
                 foreach($followers as $follower) {
                     $userData = User::select()->where('id', $follower['user_from'])->one(); //pegar somente o id do usuário que está te seguindo
@@ -84,8 +84,8 @@ class UserHandler {
                     $user->followers[] = $newUser; //add no array
                 }
 
-                //following
-                $following = UserRelation::select()->where('user_from', $id)->get(); //que sou eu que estou seguindo
+                //following - pessoas que eu estou seguindo
+                $following = UserRelation::select()->where('user_from', $id)->get();
 
                 foreach($following as $follower) {
                     $userData = User::select()->where('id', $follower['user_from'])->one(); //pegar somente o id do usuário que estou seguindo

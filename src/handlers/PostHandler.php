@@ -18,7 +18,7 @@ class PostHandler {
         }
     }
 
-    public function _postListObject($postList, $loggedUserId) {
+    public static function _postListToObject($postList, $loggedUserId) {
         $posts = [];
         foreach($postList as $postItem) {
             $newPost = new Post();
@@ -52,9 +52,10 @@ class PostHandler {
         return $posts;
     }
 
-    public static function getUserFeed($idUser, $page) {
+    public static function getUserFeed($idUser, $page, $loggedUserId) {
         $perPage = 2;
 
+        //pegar os posts dos usuários
         $postList = Post::select()
             ->where('id_user', $idUser)
             ->orderBy('created_at', 'desc')
@@ -65,12 +66,11 @@ class PostHandler {
             ->where('id_user', $idUser)
         ->count();
 
-
         $pageCount = ceil($total / $perPage);
         
         //3. transformar os resultados em objetos nos models
         
-        $posts = self::_postListObject($postList, $idUser);
+        $posts = self::_postListToObject($postList, $loggedUserId);
 
         //5. retornar o resultado
 
@@ -92,7 +92,7 @@ class PostHandler {
         foreach($userList as $userItem) {
             $users[] = $userItem['user_to'];
         }
-        $users[] = $idUser;
+        $users[] = $idUser; //add eu porque eu vejo as minhas proprias postagens
        
         //2. pegar os posts da galera ordenada por data
         $postList = Post::select()
@@ -105,12 +105,10 @@ class PostHandler {
             ->where('id_user', 'in', $users)
         ->count();
 
-
         $pageCount = ceil($total / $perPage);
-        
-        //3. transformar os resultados em objetos nos models
 
-        $posts = self::_postListObject($postList, $idUser);
+        //3. transformar os resultados em objetos nos models
+        $posts = self::_postListToObject($postList, $idUser);
 
         //5. retornar o resultado
 
@@ -133,7 +131,7 @@ class PostHandler {
             $newPost = new Post();
             $newPost->id = $photo['id'];
             $newPost->type = $photo['type'];
-            $newPost->created_ad =$photo['created_at'];
+            $newPost->created_at = $photo['created_at'];
             $newPost->body =$photo['body'];
 
             $photos[] = $newPost;

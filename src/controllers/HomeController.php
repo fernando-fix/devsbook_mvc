@@ -29,9 +29,4 @@ class HomeController extends Controller {
             'feed' => $feed
         ]);
     }
-
-    public function logout() {
-        $_SESSION['token'] = '';
-        $this->redirect('/login');
-    }
 }
