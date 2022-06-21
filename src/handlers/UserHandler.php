@@ -88,7 +88,7 @@ class UserHandler {
                 $following = UserRelation::select()->where('user_from', $id)->get();
 
                 foreach($following as $follower) {
-                    $userData = User::select()->where('id', $follower['user_from'])->one(); //pegar somente o id do usuário que estou seguindo
+                    $userData = User::select()->where('id', $follower['user_to'])->one(); //pegar somente o id do usuário que estou seguindo
                     $newUser = new User(); //table usuarios
                     $newUser->id = $userData['id']; //da tabela de usuarios
                     $newUser->name = $userData['name']; 
@@ -124,4 +124,52 @@ class UserHandler {
 
         return $token;
     }
+
+    public static function isFollowing($from, $to){
+        $data = UserRelation::select()
+            ->where('user_from', $from)
+            ->where('user_to', $to)
+        ->one();
+
+        if($data) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function follow($from, $to) {
+        UserRelation::insert([
+            'user_from' => $from,
+            'user_to' => $to
+        ])->execute();
+    }
+
+    public static function unfollow($from, $to) {
+        UserRelation::delete()
+            ->where('user_from', $from)
+            ->where('user_to', $to)
+        ->execute();
+    }
+
+    public static function searchUser($term) {
+        $users = [];
+
+        $data = User::select()->where('name', 'like', '%'.$term.'%')->get();
+
+        if(!empty($data)) {
+            foreach($data as $user) {
+                $newUser = new User();
+                $newUser->id = $user['id'];
+                $newUser->name = $user['name'];
+                $newUser->avatar = $user['avatar'];
+    
+                $users[] = $newUser;
+            }
+        }
+
+        return $users;
+    }
+
+
 }

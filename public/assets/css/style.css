@@ -291,6 +291,11 @@ header .head-side {
 .profile-info-item {
     text-align: center;
 }
+
+.profile-info-item a {
+    text-decoration: none;
+}
+
 .profile-info-item-n {
     font-weight: bold;
     font-size:20px;
@@ -390,6 +395,7 @@ header .head-side {
 }
 .full-user-photos .user-photo-item {
     margin:0;
+    max-width: 100%;
 }
 
 .feed-pagination a {
@@ -407,6 +413,23 @@ header .head-side {
 
 .feed-pagination a.active {
     background-color: rgb(185, 208, 250);
+}
+
+.button {
+    border: 0;
+    padding: 10px 20px;
+    background-color: #4a76a8;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0px 0px 3px #999;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.button:hover {
+    background-color: #477dbb;
 }
 
 @media (max-width: 992px) {
