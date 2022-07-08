@@ -60,6 +60,7 @@ class UserHandler {
             $user = new User;
             $user->id = $data['id'];
             $user->name = $data['name'];
+            $user->email = $data['email'];
             $user->birthdate = $data['birthdate'];
             $user->city = $data['city'];
             $user->work = $data['work'];
@@ -104,6 +105,16 @@ class UserHandler {
             }
 
             return $user;
+        }
+
+        return false;
+    }
+
+    public static function getEmailById($id) {
+        $data = User::select()->where('id', $id)->one();
+
+        if($data) {
+            return $data['email'];
         }
 
         return false;
@@ -171,5 +182,20 @@ class UserHandler {
         return $users;
     }
 
+    public static function updateUser($id, $name, $birthdate, $email, $city, $work, $newpass1) {
+
+        //vai efetuar a troca somente em itens que ele recebeu valor diferente de false
+        
+        ($name)?User::update()->set('name', $name)->where('id', $id)->execute():"";
+        ($birthdate)?User::update()->set('birthdate', $birthdate)->where('id', $id)->execute():"";
+        ($email)?User::update()->set('email', $email)->where('id', $id)->execute():"";
+        ($city)?User::update()->set('city', $city)->where('id', $id)->execute():"";
+        ($work)?User::update()->set('work', $work)->where('id', $id)->execute():"";
+
+        if($newpass1) {
+            $hash = password_hash($newpass1, PASSWORD_DEFAULT);
+            User::update()->set('password', $hash)->where('id', $id)->execute();
+        }
+    }
 
 }

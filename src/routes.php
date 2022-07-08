@@ -7,6 +7,7 @@ $router = new Router();
 $router->get('/', 'HomeController@index');
 $router->get('/login', 'LoginController@signin'); //logar
 $router->post('/login', 'LoginController@signinAction'); //logar action
+
 $router->get('/cadastro', 'LoginController@signup'); //cadastrar
 $router->post('/cadastro', 'LoginController@signupAction'); //cadastrar action
 
@@ -25,8 +26,6 @@ $router->get('/pesquisa', 'SearchController@index');
 
 $router->get('/sair', 'LoginController@logout');
 
-//$router->get('/pesquisar');
-//$router->get('/amigos');
-//$router->get('/fotos');
-//$router->get('/config');
+$router->get('/config', 'ConfigController@index');
+$router->post('/upconfig', 'ConfigController@updateAction');
 

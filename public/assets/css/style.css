@@ -432,6 +432,54 @@ header .head-side {
     background-color: #477dbb;
 }
 
+/* Config CSS start*/
+
+.config {
+    width: 100%;
+}
+.config label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #888888;
+    margin-bottom: 2px;
+}
+
+.config hr {
+    margin-top: 10px;
+}
+
+.config-item {
+    margin-top: 10px;
+}
+
+.config-item input{
+    width: 70%;
+    min-width: 300px;
+    padding: 5px;
+}
+
+.config .button {
+    margin-top: 10px;
+}
+
+/* Config CSS end */
+/* Alert start */
+
+.config .alert {
+    width: 70%;
+    min-width: 300px;
+    padding: 5px;
+    border: 1px solid #F00;
+    background-color: #f1b3b3;
+    color: rgb(189, 0, 0);
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+/* Alert end */
+
 @media (max-width: 992px) {
     header .head-side-right {
         display:none !important;
@@ -517,6 +565,10 @@ header .head-side {
 
     .full-user-photos {
         grid-template-columns: repeat(1, 1fr);
+    }
+
+    .config {
+        width: 70%;
     }
 
 }
