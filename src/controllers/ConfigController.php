@@ -34,6 +34,8 @@ class ConfigController extends Controller
     //atualiza os dados do usuário
     public function updateAction()
     {
+        $updateFields = [];
+
         //receba
         $name = filter_input(INPUT_POST, 'name');
         $birthdate = filter_input(INPUT_POST, 'birthdate');
@@ -54,6 +56,7 @@ class ConfigController extends Controller
             $name = false;
             $this->redirect('/config');
         }
+        $updateFields['name'] = $name;
 
         //cidade
         if (!$city) {
@@ -68,6 +71,7 @@ class ConfigController extends Controller
                 $this->redirect('/config');
             }
         }
+        $updateFields['city'] = $city;
 
         //trabalho
         if (!$work) {
@@ -82,6 +86,7 @@ class ConfigController extends Controller
                 $this->redirect('/config');
             }
         }
+        $updateFields['work'] = $work;
 
         //email
         if ($email) {
@@ -102,6 +107,7 @@ class ConfigController extends Controller
         } else {
             $email = false;
         }
+        $updateFields['email'] = $email;
 
         //data
         if ($birthdate) {
@@ -121,9 +127,10 @@ class ConfigController extends Controller
             $birthdate = false;
             $this->redirect('/config');
         }
+        $updateFields['birthdate'] = $birthdate;
 
         //senha
-        if ($newpass1 != '' || $newpass1 != '') {
+        if ($newpass1 != '' || $newpass2 != '') {
             if ($newpass1 != $newpass2) {
                 $_SESSION['flash'] = 'Senhas digitadas não coincidem!';
                 $newpass1 = false;
@@ -131,8 +138,9 @@ class ConfigController extends Controller
             }
             //se chegou até aqui a senha é atualizada
         }
+        $updateFields['password'] = $newpass1;
 
-        UserHandler::updateUser($this->loggedUser->id, $name, $birthdate, $email, $city, $work, $newpass1);
+        UserHandler::updateUser($updateFields, $this->loggedUser->id);
 
         $this->redirect('/config');
     }

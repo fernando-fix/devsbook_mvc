@@ -182,18 +182,18 @@ class UserHandler {
         return $users;
     }
 
-    public static function updateUser($id, $name, $birthdate, $email, $city, $work, $newpass1) {
+    public static function updateUser($field, $id) {
 
         //vai efetuar a troca somente em itens que ele recebeu valor diferente de false
         
-        ($name)?User::update()->set('name', $name)->where('id', $id)->execute():"";
-        ($birthdate)?User::update()->set('birthdate', $birthdate)->where('id', $id)->execute():"";
-        ($email)?User::update()->set('email', $email)->where('id', $id)->execute():"";
-        ($city)?User::update()->set('city', $city)->where('id', $id)->execute():"";
-        ($work)?User::update()->set('work', $work)->where('id', $id)->execute():"";
+        ($field['name'])?User::update()->set('name', $field['name'])->where('id', $id)->execute():"";
+        ($field['birthdate'])?User::update()->set('birthdate', $field['birthdate'])->where('id', $id)->execute():"";
+        ($field['email'])?User::update()->set('email', $field['email'])->where('id', $id)->execute():"";
+        ($field['city'])?User::update()->set('city', $field['city'])->where('id', $id)->execute():"";
+        ($field['work'])?User::update()->set('work', $field['work'])->where('id', $id)->execute():"";
 
-        if($newpass1) {
-            $hash = password_hash($newpass1, PASSWORD_DEFAULT);
+        if($field['password']) {
+            $hash = password_hash($field['password'], PASSWORD_DEFAULT);
             User::update()->set('password', $hash)->where('id', $id)->execute();
         }
     }
