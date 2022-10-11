@@ -21,16 +21,16 @@
                     </div>
                 <?php endif; ?>
 
-                <form action="<?= $base; ?>/upconfig" method="post" autocomplete="off">
+                <form action="<?= $base; ?>/upconfig" method="post" autocomplete="off" enctype="multipart/form-data">
 
                     <div class="config-item">
                         <label for="">Novo Avatar</label>
-                        <input type="file" name="" id="">
+                        <input type="file" name="avatar" id="avatar">
                     </div>
 
                     <div class="config-item">
                         <label for="">Nova capa:</label>
-                        <input type="file" name="" id="">
+                        <input type="file" name="cover" id="cover">
                     </div>
 
                     <hr>

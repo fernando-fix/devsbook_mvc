@@ -191,6 +191,8 @@ class UserHandler {
         ($field['email'])?User::update()->set('email', $field['email'])->where('id', $id)->execute():"";
         ($field['city'])?User::update()->set('city', $field['city'])->where('id', $id)->execute():"";
         ($field['work'])?User::update()->set('work', $field['work'])->where('id', $id)->execute():"";
+        ($field['avatar'])?User::update()->set('avatar', $field['avatar'])->where('id', $id)->execute():"";
+        ($field['cover'])?User::update()->set('cover', $field['cover'])->where('id', $id)->execute():"";
 
         if($field['password']) {
             $hash = password_hash($field['password'], PASSWORD_DEFAULT);
