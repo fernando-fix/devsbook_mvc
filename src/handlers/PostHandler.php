@@ -1,14 +1,18 @@
 <?php
+
 namespace src\handlers;
 
 use src\models\Post;
 use src\models\User;
 use src\models\UserRelation;
+use src\models\PostLike;
 
-class PostHandler {
-    
-    public static function addPost($idUser, $type, $body) {
-        if(!empty($idUser)) {
+class PostHandler
+{
+
+    public static function addPost($idUser, $type, $body)
+    {
+        if (!empty($idUser)) {
             Post::insert([
                 'id_user' => $idUser,
                 'type' => $type,
@@ -18,17 +22,18 @@ class PostHandler {
         }
     }
 
-    public static function _postListToObject($postList, $loggedUserId) {
+    public static function _postListToObject($postList, $loggedUserId)
+    {
         $posts = [];
-        foreach($postList as $postItem) {
+        foreach ($postList as $postItem) {
             $newPost = new Post();
             $newPost->id = $postItem['id'];
             $newPost->type = $postItem['type'];
             $newPost->created_at = $postItem['created_at'];
             $newPost->body = $postItem['body'];
             $newPost->mine = false;
-            
-            if($postItem['id_user'] == $loggedUserId){
+
+            if ($postItem['id_user'] == $loggedUserId) {
                 $newPost->mine = true;
             }
 
@@ -40,19 +45,50 @@ class PostHandler {
             $newPost->user->avatar = $newUser['avatar'];
 
             //todo: 4.1 preencher informações de like
-            $newPost->likeCount = 0;
-            $newPost->liked = false;
-           
+            $likes = PostLike::select()->where('id_post', $postItem['id'])->get();
+            $newPost->likeCount = count($likes);
+            $newPost->liked = self::isLiked($postItem['id'], $loggedUserId);
+
             //todo: 4.2 preencher informações de comments
             $newPost->comments = [];
-            
+
             $posts[] = $newPost;
         }
 
         return $posts;
     }
 
-    public static function getUserFeed($idUser, $page, $loggedUserId) {
+    public static function isLiked($id, $loggedUserId)
+    {
+        $myLike = PostLike::select()
+            ->where('id_post', $id)
+            ->where('id_user', $loggedUserId)
+        ->get();
+
+        if(count($myLike) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function deleteLike($id, $loggedUserId) {
+        PostLike::delete()
+            ->where('id_post', $id)
+            ->where('id_user', $loggedUserId)
+        ->execute();
+    }
+
+    public static function insertLike($id, $loggedUserId) {
+        PostLike::insert([
+            'id_post' => $id,
+            'id_user' => $loggedUserId,
+            'created_at' => date('Y-m-d H:i:s')
+        ])->execute();
+    }
+
+    public static function getUserFeed($idUser, $page, $loggedUserId)
+    {
         $perPage = 2;
 
         //pegar os posts dos usuários
@@ -60,50 +96,51 @@ class PostHandler {
             ->where('id_user', $idUser)
             ->orderBy('created_at', 'desc')
             ->page($page, $perPage)
-        ->get();
+            ->get();
 
         $total = Post::select()
             ->where('id_user', $idUser)
-        ->count();
+            ->count();
 
         $pageCount = ceil($total / $perPage);
-        
+
         //3. transformar os resultados em objetos nos models
-        
+
         $posts = self::_postListToObject($postList, $loggedUserId);
 
         //5. retornar o resultado
 
         return [
-            'posts' =>$posts,
+            'posts' => $posts,
             'pageCount' => $pageCount,
             'currentPage' => $page
         ];
     }
 
-    public static function getHomeFeed($idUser, $page) {
+    public static function getHomeFeed($idUser, $page)
+    {
         $perPage = 2;
-        
+
         //1. pegar lista de usuarios que eu estou seguindo
         $userList = UserRelation::select()
             ->where('user_from', $idUser)
-        ->get();
+            ->get();
         $users = [];
-        foreach($userList as $userItem) {
+        foreach ($userList as $userItem) {
             $users[] = $userItem['user_to'];
         }
         $users[] = $idUser; //add eu porque eu vejo as minhas proprias postagens
-       
+
         //2. pegar os posts da galera ordenada por data
         $postList = Post::select()
             ->where('id_user', 'in', $users)
             ->orderBy('created_at', 'desc')
             ->page($page, $perPage)
-        ->get();
+            ->get();
 
         $total = Post::select()
             ->where('id_user', 'in', $users)
-        ->count();
+            ->count();
 
         $pageCount = ceil($total / $perPage);
 
@@ -113,17 +150,18 @@ class PostHandler {
         //5. retornar o resultado
 
         return [
-            'posts' =>$posts,
+            'posts' => $posts,
             'pageCount' => $pageCount,
             'currentPage' => $page
         ];
     }
 
-    public static function getPhotosFrom($idUser) {
+    public static function getPhotosFrom($idUser)
+    {
         $photosData = Post::select()
             ->where('id_user', $idUser)
             ->where('type', 'photo')
-        ->get();
+            ->get();
 
         $photos = [];
 
@@ -132,10 +170,11 @@ class PostHandler {
             $newPost->id = $photo['id'];
             $newPost->type = $photo['type'];
             $newPost->created_at = $photo['created_at'];
-            $newPost->body =$photo['body'];
+            $newPost->body = $photo['body'];
 
             $photos[] = $newPost;
         }
         return $photos;
-    }   
+    }
+
 }

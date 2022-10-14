@@ -29,3 +29,4 @@ $router->get('/sair', 'LoginController@logout');
 $router->get('/config', 'ConfigController@index');
 $router->post('/upconfig', 'ConfigController@updateAction');
 
+$router->get('/ajax/like/{id}', 'AjaxController@like');
