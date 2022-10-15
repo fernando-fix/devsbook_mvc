@@ -33,27 +33,36 @@
             <?= nl2br($data->body) ?>
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
-            <div class="like-btn <?= ($data->liked) ? 'on' : 'off'; ?>"><?=$data->likeCount?></div>
+            <div class="like-btn <?= ($data->liked) ? 'on' : 'off'; ?>"><?= $data->likeCount ?></div>
             <div class="msg-btn"><?= count($data->comments) ?></div>
         </div>
         <div class="feed-item-comments">
 
-            <!-- <div class="fic-item row m-height-10 m-width-20">
-                <div class="fic-item-photo">
-                    <a href=""><img src="media/avatars/avatar.jpg" /></a>
-                </div>
-                <div class="fic-item-info">
-                    <a href="">Bonieky Lacerda</a>
-                    Comentando no meu próprio post
-                </div>
-            </div> -->
+            <!-- list comments -->
+            <div class="feed-item-comments-area">
+                <?php if (count($data->comments) > 0) : ?>
+                    <?php foreach ($data->comments as $comment) : ?>
+                        <div class="fic-item row m-height-10 m-width-20">
+                            <div class="fic-item-photo">
+                                <a href="<?= $base; ?>/perfil/<?= $comment['user']['id']; ?>"><img src="<?= $base; ?>/media/avatars/<?= $comment['user']['avatar']; ?>" /></a>
+                            </div>
+                            <div class="fic-item-info">
+                                <a href="<?= $base; ?>/perfil/<?= $comment['user']['id']; ?>"><?= $comment['user']['name']; ?></a>
+                                <?= $comment['body']; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
 
+            <!-- new comment -->
             <div class="fic-answer row m-height-10 m-width-20">
                 <div class="fic-item-photo">
-                    <a href=""><img src="<?= $base; ?>/media/avatars/<?= $loggedUser->avatar ?>" /></a>
+                    <a href="<?= $base; ?>"><img src="<?= $base; ?>/media/avatars/<?= $loggedUser->avatar ?>" /></a>
                 </div>
                 <input type="text" class="fic-item-field" placeholder="Escreva um comentário" />
             </div>
+
         </div>
     </div>
 </div>

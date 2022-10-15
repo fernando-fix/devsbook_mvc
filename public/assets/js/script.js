@@ -30,8 +30,8 @@ if (document.querySelector('.tab-item')) {
     });
 }
 
-if(document.querySelector('.feed-new-input-placeholder')) {
-    document.querySelector('.feed-new-input-placeholder').addEventListener('click', function(obj){
+if (document.querySelector('.feed-new-input-placeholder')) {
+    document.querySelector('.feed-new-input-placeholder').addEventListener('click', function (obj) {
         obj.target.style.display = 'none';
         document.querySelector('.feed-new-input').style.display = 'block';
         document.querySelector('.feed-new-input').focus();
@@ -39,10 +39,10 @@ if(document.querySelector('.feed-new-input-placeholder')) {
     });
 }
 
-if(document.querySelector('.feed-new-input')) {
-    document.querySelector('.feed-new-input').addEventListener('blur', function(obj) {
+if (document.querySelector('.feed-new-input')) {
+    document.querySelector('.feed-new-input').addEventListener('blur', function (obj) {
         let value = obj.target.innerText.trim();
-        if(value == '') {
+        if (value == '') {
             obj.target.style.display = 'none';
             document.querySelector('.feed-new-input-placeholder').style.display = 'block';
         }
@@ -62,7 +62,46 @@ if (document.querySelector('.like-btn')) {
                 item.innerText = --count;
             }
 
-            fetch(BASE + '/ajax/like/'+id);
+            fetch(BASE + '/ajax/like/' + id);
+        });
+    });
+}
+
+if (document.querySelector('.fic-item-field')) {
+    document.querySelectorAll('.fic-item-field').forEach(item => {
+        item.addEventListener('keyup', async (e) => {
+            if (e.keyCode == 13) {
+                let id = item.closest('.feed-item').getAttribute('data-id');
+                let txt = item.value;
+                item.value = '';
+
+                let data = new FormData();
+                data.append('id', id);
+                data.append('txt', txt);
+
+                let req = await fetch(BASE + '/ajax/comment', {
+                    method: 'POST',
+                    body: data
+                });
+                let json = await req.json();
+
+                if (json.error == '') {
+                    let html = '<div class="fic-item row m-height-10 m-width-20">';
+                    html += '<div class="fic-item-photo">';
+                    html += '<a href="' + BASE + json.link + '"><img src="' + BASE + json.avatar + '" /></a>';
+                    html += '</div>';
+                    html += '<div class="fic-item-info">';
+                    html += '<a href="' + BASE + json.link + '">' + json.name + '</a>';
+                    html += json.body;
+                    html += '</div>';
+                    html += '</div>';
+
+                    item.closest('.feed-item')
+                        .querySelector('.feed-item-comments-area')
+                        .innerHTML += html;
+                }
+
+            }
         });
     });
 }
