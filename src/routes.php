@@ -31,3 +31,4 @@ $router->post('/upconfig', 'ConfigController@updateAction');
 
 $router->get('/ajax/like/{id}', 'AjaxController@like');
 $router->post('/ajax/comment', 'AjaxController@comment');
+$router->post('/ajax/upload', 'AjaxController@upload');
