@@ -1,33 +1,20 @@
-## Instalação
-Você pode clonar este repositório OU baixar o .zip
-
-Ao descompactar, é necessário rodar o **composer** pra instalar as dependências e gerar o *autoload*.
-
-Vá até a pasta do projeto, pelo *prompt/terminal* e execute:
-> composer install
-
-Depois é só aguardar.
-
-## Configuração
-Todos os arquivos de **configuração** e aplicação estão dentro da pasta *src*.
-
-As configurações de Banco de Dados e URL estão no arquivo *src/Config.php*
-
-É importante configurar corretamente a constante *BASE_DIR*:
-> const BASE_DIR = '/**PastaDoProjeto**/public';
-
-## Uso
-Você deve acessar a pasta *public* do projeto.
-
-O ideal é criar um ***alias*** específico no servidor que direcione diretamente para a pasta *public*.
-
-## Modelo de MODEL
-```php
-<?php
-namespace src\models;
-use \core\Model;
-
-class Usuario extends Model {
-
-}
-```
+# Devsbook_oo
+Rede social inspirada no facebook utilizando PHP orientado à objetos
+## Sobre o projeto
+Este projeto está sendo desenvolvido durante do curso de PHP disponível no site da B7WEB
+<br><a href="https://alunos.b7web.com.br/login">Link para conhecer a plataforma do curso<a>
+# Tecnologias utilizadas
+## Front end
+- HTML / CSS / JS
+## Banco de dados
+- MariaDB
+## Back end
+- PHP
+# Como executar o projeto
+## Banco de dados
+O arquivo script.sql contém os scripts para a criação do banco de dados
+## Backend
+Todos os arquivos devem rodar a partir de um servidor PHP
+# Autor
+B7WEB
+https://www.b7web.com.br/

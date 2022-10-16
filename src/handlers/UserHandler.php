@@ -130,7 +130,9 @@ class UserHandler {
             'password' => $hash,
             'name' => $name,
             'birthdate' => $birthdate,
-            'token' => $token
+            'token' => $token,
+            'avatar' => 'default.jpg',
+            'cover' => 'default.jpg'
         ])->execute();
 
         return $token;

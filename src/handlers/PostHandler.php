@@ -23,6 +23,32 @@ class PostHandler
         }
     }
 
+    public static function delete($idPost, $loggedUserId)
+    {
+        //1. verificar se o post existe e se o post é seu
+        $post = Post::select()
+            ->where('id', $idPost)
+            ->where('id_user', $loggedUserId)
+            ->get();
+
+        if (count($post) > 0) {
+            $post = $post[0];
+            //2. deletar o likes e comments 
+            PostLike::delete()->where('id_post', $idPost)->execute();
+            PostComment::delete()->where('id_post', $idPost)->execute();
+
+            //3. se a foto for type photo e deletar também
+            if ($post['type'] == 'photo') {
+                $img = __DIR__.'/../../public/media/uploads/' . $post['body'];
+                if (file_exists($img)) {
+                    unlink($img);
+                }
+            }
+            //4. deletar o post
+            Post::delete()->where('id', $idPost)->execute();
+        }
+    }
+
     public static function _postListToObject($postList, $loggedUserId)
     {
         $posts = [];
@@ -52,9 +78,9 @@ class PostHandler
 
             //todo: 4.2 preencher informações de comments
             $newPost->comments = PostComment::select()->where('id_post', $postItem['id'])->get();
-            
+
             foreach ($newPost->comments as $key => $comment) {
-                    $newPost->comments[$key]['user'] = User::select()->where('id', $comment['id_user'])->one();
+                $newPost->comments[$key]['user'] = User::select()->where('id', $comment['id_user'])->one();
             }
             $posts[] = $newPost;
         }
@@ -67,23 +93,25 @@ class PostHandler
         $myLike = PostLike::select()
             ->where('id_post', $id)
             ->where('id_user', $loggedUserId)
-        ->get();
+            ->get();
 
-        if(count($myLike) > 0) {
+        if (count($myLike) > 0) {
             return true;
         } else {
             return false;
         }
     }
 
-    public static function deleteLike($id, $loggedUserId) {
+    public static function deleteLike($id, $loggedUserId)
+    {
         PostLike::delete()
             ->where('id_post', $id)
             ->where('id_user', $loggedUserId)
-        ->execute();
+            ->execute();
     }
 
-    public static function insertLike($id, $loggedUserId) {
+    public static function insertLike($id, $loggedUserId)
+    {
         PostLike::insert([
             'id_post' => $id,
             'id_user' => $loggedUserId,
@@ -91,7 +119,8 @@ class PostHandler
         ])->execute();
     }
 
-    public static function addComment($id, $txt, $loggedUserId) {
+    public static function addComment($id, $txt, $loggedUserId)
+    {
         PostComment::insert([
             'id_post' => $id,
             'id_user' => $loggedUserId,
@@ -189,5 +218,4 @@ class PostHandler
         }
         return $photos;
     }
-
 }

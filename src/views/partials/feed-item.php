@@ -21,13 +21,19 @@
                 <br />
                 <span class="fidi-date">
                     <?php
-                    echo date('d,m,Y', strtotime($data->created_at));
+                    echo date('d/m/Y', strtotime($data->created_at));
                     ?>
+
                 </span>
             </div>
-            <div class="feed-item-head-btn">
-                <img src="<?= $base; ?>/assets/images/more.png" />
-            </div>
+            <?php if ($data->mine) : ?>
+                <div class="feed-item-head-btn">
+                    <img src="<?= $base; ?>/assets/images/more.png" />
+                    <div class="feed-item-more-window">
+                        <a href="<?= $base; ?>/post/<?= $data->id; ?>/delete">Excluir post</a>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
             <?php
@@ -36,7 +42,7 @@
                     echo nl2br($data->body);
                     break;
                 case 'photo';
-                    echo '<img src="'.$base.'/media/uploads/'.$data->body.'">';
+                    echo '<img src="' . $base . '/media/uploads/' . $data->body . '">';
                     break;
             }
             ?>
